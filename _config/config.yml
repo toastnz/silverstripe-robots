@@ -1,0 +1,8 @@
+---
+Name: robots
+---
+
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - Innoweb\Robots\Extensions\SiteConfigExtension
+

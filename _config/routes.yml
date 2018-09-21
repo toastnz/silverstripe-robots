@@ -1,0 +1,10 @@
+---
+Name: robotsroutes
+Before: 
+  - '*'
+---
+
+SilverStripe\Control\Director:
+  rules:
+    robots.txt: Innoweb\Robots\Controller\RobotsController
+    

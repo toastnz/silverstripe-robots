@@ -1,0 +1,19 @@
+{
+	"name": "innoweb/silverstripe-robots",
+	"description": "Adds a Robots.txt file that is configurable from /admin/settings/.",
+	"type": "silverstripe-vendormodule",
+	"license": "BSD-3-Clause",
+	"keywords": ["silverstripe", "robots.txt", "robots", "seo"],
+	"authors": [{
+		"name": "Florian Thoma",
+		"homepage": "http://www.innoweb.com.au"
+	}],
+	"require": {
+		"silverstripe/cms": "^4"
+	},
+	"autoload": {
+		"psr-4": {
+			"Innoweb\\Robots\\": "src/"
+		}
+	}
+}
