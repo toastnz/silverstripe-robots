@@ -12,27 +12,17 @@ class SiteConfigExtension extends DataExtension
 {
     
     private static $db = [
-        'RobotsAllowCrawl' => 'Boolean',
         'RobotsContent' => 'Text',
     ];
     
     public function updateCMSFields(FieldList $fields)
     {
         
-        $fields->addFieldsToTab(
+        $fields->addFieldToTab(
             'Root.Robots', 
-            [
-                FieldGroup::create(
-                    'RobotsSettings',
-                    [
-                        CheckboxField::create('RobotsAllowCrawl', 'Allow crawling')
-                            
-                    ]
-                )
-                    ->setTitle('Global settings')
-                    ->setDescription('If this is disabled the content below will be ignored and all robots disallowed.'),
-                TextareaField::create('RobotsContent','Content of robots.txt'),
-            ]
+            TextareaField::create('RobotsContent','Content of robots.txt')
+                ->setDescription('Will be redered in the robots.txt of the site. If no content is entered, '
+                    .'robots will be disallowed from accessing the site')
         );
         
     }

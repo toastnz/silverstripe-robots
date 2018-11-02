@@ -23,11 +23,28 @@ Then run dev/build.
 
 ## Configuration
 
-The module is configurable from within /admin/settings. 
+You can disallow robots from accessing your site using the config.
+
+You can add the following code to your .env file to disallow robots for an environment. 
+```
+ROBOTS_DISALLOW="true"
+``` 
+
+You can also disallow access by using the yml config:
+```
+RobotsController:
+  disallow_robots: true
+```
+
+The default value for this configuration is `false`, allowing access to the site (except if the romots.txt field content is empty, see below).
+
+Both these methods will add a default robots.txt content in place, that will disallow robots from accessing your site. 
+
+## robots.txt content
 
 To add a romots.txt to you site, paste in your robots.txt configuration into the textarea inside the robots tab in admin/settings/.
 
-### Example config
+### Example content
 
 Here a good standard robots.txt configuration:
 
@@ -38,6 +55,8 @@ Disallow: /dev/
 Disallow: /admin/
 Disallow: /Security/
 ```
+
+If you leave the field empty, a default content will be used that blocks robots from accessing the site.
 
 ## License
 
