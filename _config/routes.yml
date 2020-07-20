@@ -1,10 +1,25 @@
 ---
-Name: robotsroutes
-Before: 
+Name: innoweb-robots-routes-multi
+After:
   - '*'
+  - 'multisitesmodelascontrollerroutes'
+  - 'modelascontrollercatchallroute'
+Only:
+  classexists: 'Symbiote\Multisites\Multisites'
 ---
-
 SilverStripe\Control\Director:
   rules:
-    robots.txt: Innoweb\Robots\Controller\RobotsController
-    
+    '': Symbiote\Multisites\Control\MultisitesRootController
+    robots.txt: Innoweb\Robots\Controllers\RobotsController
+    $URLSegment//$Action/$ID/$OtherID: Symbiote\Multisites\Control\MultisitesFrontController
+
+---
+Name: innoweb-robots-routes-nomulti
+After:
+  - '*'
+Except:
+  classexists: 'Symbiote\Multisites\Multisites'
+---
+SilverStripe\Control\Director:
+  rules:
+    robots.txt: Innoweb\Robots\Controllers\RobotsController

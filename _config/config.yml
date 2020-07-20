@@ -1,8 +1,17 @@
 ---
-Name: robots
+Name: innoweb-robots-multisites
+Only:
+  classexists: 'Symbiote\Multisites\Multisites'
 ---
-
-SilverStripe\SiteConfig\SiteConfig:
+Symbiote\Multisites\Model\Site:
   extensions:
-    - Innoweb\Robots\Extensions\SiteConfigExtension
+    - Innoweb\Robots\Extensions\ConfigExtension
 
+---
+Name: innoweb-robots-nomultisites
+Except:
+  classexists: 'Symbiote\Multisites\Multisites'
+---
+Silverstripe\SiteConfig\SiteConfig:
+  extensions:
+    - Innoweb\Robots\Extensions\ConfigExtension

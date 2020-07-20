@@ -4,9 +4,16 @@
 	"type": "silverstripe-vendormodule",
 	"license": "BSD-3-Clause",
 	"keywords": ["silverstripe", "robots.txt", "robots", "seo"],
+	"homepage": "https://github.com/xini/silverstripe-robots",
+	"support": {
+		"issues": "https://github.com/xini/silverstripe-robots/issues"
+	},
 	"authors": [{
 		"name": "Florian Thoma",
-		"homepage": "http://www.innoweb.com.au"
+		"homepage": "https://innoweb.com.au"
+	},{
+		"name": "Luke Fromhold",
+		"homepage": "https://innoweb.com.au"
 	}],
 	"require": {
 		"silverstripe/cms": "^4"
