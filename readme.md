@@ -1,4 +1,4 @@
-# SilverStripe Robots.txt
+# Silverstripe Robots.txt
 
 [![Version](http://img.shields.io/packagist/v/innoweb/silverstripe-robots.svg?style=flat-square)](https://packagist.org/packages/innoweb/silverstripe-robots)
 [![License](http://img.shields.io/packagist/l/innoweb/silverstripe-robots.svg?style=flat-square)](license.md)
@@ -7,11 +7,11 @@
 
 Adds a Robots.txt file that is configurable from /admin/settings/.
 
-This module has been inspired by MichaelJJames' [silverstripe-robots](https://github.com/MichaelJJames/silverstripe-robots) and Symbiote's [Multisites](https://github.com/symbiote/silverstripe-multisites).
+This module supports single site as well as [multisites](https://github.com/symbiote/silverstripe-multisites) setups.
 
 ## Requirements
 
-* SilverStripe CMS 4.x
+* Silverstripe CMS 4.x
 
 ## Installation
 
@@ -23,30 +23,51 @@ Then run dev/build.
 
 ## Configuration
 
-You can disallow robots from accessing your site using the config.
+On the SiteConfig (or Site is Multisites is installed) there is a setting in the CMS that lets you set the robots mode. The three options are:
+* Allow all
+* Disallow all
+* Custom content
 
-You can add the following code to your .env file to disallow robots for an environment. 
+The output of all three states is managed through templates and can be overwritten for an app or theme.
+
+### Allow all
+
+When switched to 'allow all' the module uses the template `Innoweb/Robots/RobotsController_allow.ss` with the following default content:
+
 ```
-ROBOTS_DISALLOW="true"
-``` 
-
-You can also disallow access by using the yml config:
-```
-RobotsController:
-  disallow_robots: true
+<% if $GoogleSitemapURL %>Sitemap: {$GoogleSitemapURL}<% end_if %>
+User-agent: *
+Disallow: /dev/
+Disallow: /admin/
+Disallow: /Security/
 ```
 
-The default value for this configuration is `false`, allowing access to the site (except if the romots.txt field content is empty, see below).
+The module checks whether the [Google Sitemaps module](https://github.com/wilr/silverstripe-googlesitemaps) is installed and injects the sitemap URL automatically.
 
-Both these methods will add a default robots.txt content in place, that will disallow robots from accessing your site. 
+It allows access to all pages and disallows access to development and security URLs by default.
 
-## robots.txt content
+### Disallow all
 
-To add a romots.txt to you site, paste in your robots.txt configuration into the textarea inside the robots tab in admin/settings/.
+When switched to 'disallow all' the module uses the template `Innoweb/Robots/RobotsController_disallow.ss` with the following default content:
 
-### Example content
+```
+UserAgent: *
+Disallow: /
+```
 
-Here a good standard robots.txt configuration:
+This disallows all robots from accessing any page on the site.
+
+### Custom content
+
+This setting reveals a text field in the CMS where custom code can be entered. 
+
+The template contains the following code and doesn't add anything to the custom code entered:
+
+```
+$RobotsContent.RAW
+```
+
+A good standard robots.txt configuration for Silverstripe looks as follows. This is used as default when the module is switched to 'allow all':
 
 ```
 Sitemap: https://www.example.com/sitemap.xml
@@ -55,8 +76,6 @@ Disallow: /dev/
 Disallow: /admin/
 Disallow: /Security/
 ```
-
-If you leave the field empty, a default content will be used that blocks robots from accessing the site.
 
 ## License
 
