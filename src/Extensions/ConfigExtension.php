@@ -46,7 +46,9 @@ class ConfigExtension extends DataExtension
     {
         $fields->removeByName([
             'RobotsMode',
-            'RobotsContent'
+            'RobotsContent',
+            'SiteAdvancedHeader',
+            'RobotsTxt',
         ]);
 
         $tabPath = $this->getOwner()->getRobotsTabPath();
