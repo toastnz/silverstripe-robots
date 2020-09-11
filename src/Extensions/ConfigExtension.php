@@ -6,9 +6,12 @@ use Innoweb\Robots\Controllers\RobotsController;
 use SilverStripe\Core\Environment;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\DataExtension;
+use UncleCheese\DisplayLogic\Forms\Wrapper;
+use SilverStripe\Core\Convert;
 
 class ConfigExtension extends DataExtension
 {
@@ -25,6 +28,11 @@ class ConfigExtension extends DataExtension
     private static $db = [
         'RobotsMode' => 'Varchar(20)',
         'RobotsContent' => 'Text'
+    ];
+
+    private static $casting = [
+        'RenderedContentAllow' => 'Text',
+        'RenderedContentDisallow' => 'Text',
     ];
 
     public function populateDefaults()
@@ -57,7 +65,7 @@ class ConfigExtension extends DataExtension
         }
 
         $isCustomAllowed = $this->getOwner()->getIsCustomRobotsModeAllowed();
-        $customField = TextareaField::create('RobotsContent', 'Custom');
+        $customField = TextareaField::create('RobotsContent', 'Custom Content');
 
         $forcedMode = $this->getOwner()->getForcedRobotsMode();
         if ($forcedMode) {
@@ -97,6 +105,30 @@ class ConfigExtension extends DataExtension
                 $fields->addFieldToTab($tabPath, $customField);
                 $customField->displayIf('RobotsMode')->isEqualTo(RobotsController::MODE_CUSTOM);
             }
+        }
+
+        if (isset($options[RobotsController::MODE_ALLOW])) {
+            $allowedOutputField = Wrapper::create(
+                TextareaField::create(
+                    'AllowedContent',
+                    'Robots.txt output',
+                    $this->owner->getRenderedContentAllow()
+                )->setReadonly(true)
+            );
+            $fields->addFieldToTab($tabPath, $allowedOutputField);
+            $allowedOutputField->displayIf('RobotsMode')->isEqualTo(RobotsController::MODE_ALLOW);
+        }
+
+        if (isset($options[RobotsController::MODE_DISALLOW])) {
+            $disallowedOutputField = Wrapper::create(
+                TextareaField::create(
+                    'ContentDisallow',
+                    'Robots.txt output',
+                    $this->owner->getRenderedContentDisallow()
+                )->setReadonly(true)
+            );
+            $fields->addFieldToTab($tabPath, $disallowedOutputField);
+            $disallowedOutputField->displayIf('RobotsMode')->isEqualTo(RobotsController::MODE_DISALLOW);
         }
 
         $currMode = $this->getOwner()->RobotsMode;
@@ -164,5 +196,15 @@ class ConfigExtension extends DataExtension
         $path = $this->getOwner()->config()->get('robots_tab_path');
         $this->getOwner()->invokeWithExtensions('updateRobotsTabPath', $path);
         return $path;
+    }
+
+    public function getRenderedContentAllow() {
+        $controller = RobotsController::create();
+        return $controller->allow();
+    }
+
+    public function getRenderedContentDisallow() {
+        $controller = RobotsController::create();
+        return $controller->disallow();
     }
 }
