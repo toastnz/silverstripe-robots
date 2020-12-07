@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0]
+
+* add robots meta tag for all pages based on env type, wilr/silverstripe-googlesitemaps module and page specific config values
+
 ## [2.1.0]
 
 * fix content for disallowed content

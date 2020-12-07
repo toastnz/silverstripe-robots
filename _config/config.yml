@@ -1,4 +1,22 @@
 ---
+Name: innoweb-robots
+---
+Page:
+  extensions:
+    - Innoweb\Robots\Extensions\PageExtension
+  robots_enable_metatag: true
+  robots_noindex: false
+  robots_nofollow: false
+
+SilverStripe\CMS\Model\VirtualPage:
+  robots_noindex: true
+  robots_nofollow: true
+
+SilverStripe\ErrorPage\ErrorPage:
+  robots_noindex: true
+  robots_nofollow: true
+
+---
 Name: innoweb-robots-multisites
 Only:
   classexists: 'Symbiote\Multisites\Multisites'

@@ -5,7 +5,7 @@
 
 ## Overview
 
-Adds a Robots.txt file that is configurable from /admin/settings/.
+Adds a Robots.txt file that is configurable from /admin/settings/ and injects robots meta tag into all pages.
 
 This module supports single site as well as [multisites](https://github.com/symbiote/silverstripe-multisites) setups.
 
@@ -23,6 +23,8 @@ Then run dev/build.
 
 ## Configuration
 
+### Robots.txt
+
 On the SiteConfig (or Site is Multisites is installed) there is a setting in the CMS that lets you set the robots mode. The three options are:
 * Allow all
 * Disallow all
@@ -30,7 +32,7 @@ On the SiteConfig (or Site is Multisites is installed) there is a setting in the
 
 The output of all three states is managed through templates and can be overwritten for an app or theme.
 
-### Allow all
+#### Allow all
 
 When switched to 'allow all' the module uses the template `Innoweb/Robots/RobotsController_allow.ss` with the following default content:
 
@@ -46,7 +48,7 @@ The module checks whether the [Google Sitemaps module](https://github.com/wilr/s
 
 It allows access to all pages and disallows access to development and security URLs by default.
 
-### Disallow all
+#### Disallow all
 
 When switched to 'disallow all' the module uses the template `Innoweb/Robots/RobotsController_disallow.ss` with the following default content:
 
@@ -57,7 +59,7 @@ Disallow: /
 
 This disallows all robots from accessing any page on the site.
 
-### Custom content
+#### Custom content
 
 This setting reveals a text field in the CMS where custom code can be entered. 
 
@@ -76,6 +78,41 @@ Disallow: /dev/
 Disallow: /admin/
 Disallow: /Security/
 ```
+
+### Robots meta tag
+
+The module injects a robots meta tag into every page. The injection of the meta tag can be disabled using the following config, e.g. if the robots meta tag is managed manually in the template:
+
+```
+Page:
+  robots_enable_metatag: false
+```
+
+By default, all pages are set to `index, follow` with the following exceptions:
+
+* The Robots.txt setting on the site if set to 'Disallow all'
+* The environment is set to `test` or `dev`
+* The current page is displayed by the Security controller 
+* The Priority setting for the page is `-1` (see [Google Sitemaps module](https://github.com/wilr/silverstripe-googlesitemaps))
+
+Additionally, for each page type a config value can be set to control the meta tag. By default, the following values are set:
+
+```
+Page:
+  robots_noindex: false
+  robots_nofollow: false
+
+SilverStripe\CMS\Model\VirtualPage:
+  robots_noindex: true
+  robots_nofollow: true
+
+SilverStripe\ErrorPage\ErrorPage:
+  robots_noindex: true
+  robots_nofollow: true
+```
+
+This can be customised for any custom page types as needed.
+
 
 ## License
 
