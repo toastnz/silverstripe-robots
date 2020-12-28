@@ -2,9 +2,11 @@
 
 namespace Innoweb\Robots\Extensions;
 
-use SilverStripe\Core\Extension;
-use Page;
 use Innoweb\Robots\Controllers\RobotsController;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Extension;
+use SilverStripe\Security\Security;
 
 class PageExtension extends Extension
 {
@@ -54,6 +56,8 @@ class PageExtension extends Extension
         $robotsString = "$index, $follow";
 
         $this->getOwner()->invokeWithExtensions('updateRobotsTagString', $robotsString);
+
+        Controller::curr()->invokeWithExtensions('updateRobotsTagString', $robotsString);
 
         return $robotsString;
     }
