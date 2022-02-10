@@ -6,12 +6,11 @@ use Innoweb\Robots\Controllers\RobotsController;
 use SilverStripe\Core\Environment;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\SiteConfig\SiteConfig;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
-use SilverStripe\Core\Convert;
 
 class ConfigExtension extends DataExtension
 {
@@ -34,11 +33,6 @@ class ConfigExtension extends DataExtension
         'RenderedContentAllow' => 'Text',
         'RenderedContentDisallow' => 'Text',
     ];
-
-    public function populateDefaults()
-    {
-        $this->getOwner()->RobotsMode = $this->getOwner()->getDefaultRobotsMode();
-    }
 
     public function updateSiteCMSFields(FieldList $fields)
     {
@@ -131,16 +125,38 @@ class ConfigExtension extends DataExtension
             $disallowedOutputField->displayIf('RobotsMode')->isEqualTo(RobotsController::MODE_DISALLOW);
         }
 
-        $currMode = $this->getOwner()->RobotsMode;
-        if (!$currMode || !isset($options[$currMode])) {
-            reset($options);
-            $this->getOwner()->RobotsMode = key($options);
-        }
-
         return $fields;
     }
 
-    public function getDefaultRobotsMode()
+	public function populateDefaults()
+	{
+		$this->getOwner()->RobotsMode = $this->getOwner()->getDefaultRobotsMode();
+	}
+
+	public function requireDefaultRecords()
+	{
+		// get correct config class
+		if (class_exists('Symbiote\Multisites\Multisites')) {
+			$configs = \Symbiote\Multisites\Model\Site::get();
+		} else {
+			$configs = SiteConfig::get();
+		}
+		// update configs if required
+		if ($configs && $configs->exists()) {
+			foreach($configs as $config) {
+				if (!$config->RobotsMode) {
+					if ($config->RobotsContent) {
+						$config->RobotsMode = RobotsController::MODE_CUSTOM;
+					} else {
+						$config->RobotsMode = $config->getDefaultRobotsMode();
+					}
+					$config->write();
+				}
+			}
+		}
+	}
+
+	public function getDefaultRobotsMode()
     {
         $mode = RobotsController::MODE_DISALLOW;
         $this->getOwner()->invokeWithExtensions('updateDefaultRobotsMode');

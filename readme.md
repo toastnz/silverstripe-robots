@@ -53,7 +53,7 @@ It allows access to all pages and disallows access to development and security U
 When switched to 'disallow all' the module uses the template `Innoweb/Robots/RobotsController_disallow.ss` with the following default content:
 
 ```
-UserAgent: *
+User-agent: *
 Disallow: /
 ```
 

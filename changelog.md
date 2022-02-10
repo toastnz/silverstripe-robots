@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.1]
+
+* fix default values when upgrading from version 1.x
+
 ## [3.1.0]
 
 * fix use statements
