@@ -2,6 +2,7 @@
 
 namespace Innoweb\Robots\Controllers;
 
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Manifest\ModuleLoader;
@@ -26,11 +27,9 @@ class RobotsController extends Controller
 
         if ($mode === self::MODE_ALLOW) {
             return $this->allow();
-        }
-        else if ($mode === self::MODE_DISALLOW) {
+        } elseif ($mode === self::MODE_DISALLOW) {
             return $this->disallow();
-        }
-        else if ($mode === self::MODE_CUSTOM) {
+        } elseif ($mode === self::MODE_CUSTOM) {
             return $this->custom();
         }
 
@@ -87,8 +86,7 @@ class RobotsController extends Controller
 
         if ($isMultisitesEnabled) {
             $site = Multisites::inst()->getCurrentSite();
-        }
-        else {
+        } else {
             $site = SiteConfig::current_site_config();
         }
 
@@ -109,7 +107,6 @@ class RobotsController extends Controller
         }
 
         if ($isGoogleSitemapsEnabled) {
-
             $isMultisitesEnabled = ModuleLoader::inst()
                 ->getManifest()
                 ->moduleExists('symbiote/silverstripe-multisites');
@@ -117,16 +114,41 @@ class RobotsController extends Controller
             if ($isMultisitesEnabled) {
                 $site = Multisites::inst()->getCurrentSite();
                 $url = $site->getURL() . $url;
-            }
-            else {
+            } else {
                 $url = Director::absoluteURL($url);
             }
-        }
-        else {
+        } else {
             $url = null;
         }
 
         $this->extend('updateGoogleSitemapURL', $url);
         return $url;
+    }
+
+    public function getDisallowedPages()
+    {
+        $isGoogleSitemapsEnabled = ModuleLoader::inst()
+            ->getManifest()
+            ->moduleExists('wilr/silverstripe-googlesitemaps');
+
+        if ($isGoogleSitemapsEnabled) {
+            $isGoogleSitemapsEnabled = GoogleSitemap::enabled();
+        }
+
+        if ($isGoogleSitemapsEnabled) {
+            $googleSitemap = GoogleSitemap::singleton();
+            $isFiltered = (bool) $googleSitemap->config()->get('use_show_in_search');
+            $filterFieldName = 'ShowInSearch';
+            if (method_exists(GoogleSitemap::class, 'getFilterFieldName')) {
+                $filterFieldName = $googleSitemap->getFilterFieldName();
+            }
+            if ($isFiltered) {
+                return SiteTree::get()->exclude($filterFieldName, true);
+            } else {
+                return SiteTree::get()->filter(['Priority' => '-1']);
+            }
+        }
+
+        return null;
     }
 }

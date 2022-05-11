@@ -32,6 +32,12 @@ On the SiteConfig (or Site is Multisites is installed) there is a setting in the
 
 The output of all three states is managed through templates and can be overwritten for an app or theme.
 
+You can force the state using the following `.env` variable (e.g. for dev or test environment):
+
+```dotenv
+FORCE_ROBOTS_MODE="allow|disallow|custom"
+```
+
 #### Allow all
 
 When switched to 'allow all' the module uses the template `Innoweb/Robots/RobotsController_allow.ss` with the following default content:
@@ -83,7 +89,7 @@ Disallow: /Security/
 
 The module injects a robots meta tag into every page. The injection of the meta tag can be disabled using the following config, e.g. if the robots meta tag is managed manually in the template:
 
-```
+```yaml
 Page:
   robots_enable_metatag: false
 ```
@@ -97,7 +103,7 @@ By default, all pages are set to `index, follow` with the following exceptions:
 
 Additionally, for each page type a config value can be set to control the meta tag. By default, the following values are set:
 
-```
+```yaml
 Page:
   robots_noindex: false
   robots_nofollow: false
@@ -112,7 +118,6 @@ SilverStripe\ErrorPage\ErrorPage:
 ```
 
 This can be customised for any custom page types as needed.
-
 
 ## License
 

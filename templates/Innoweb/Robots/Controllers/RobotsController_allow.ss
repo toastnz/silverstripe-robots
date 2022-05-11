@@ -2,4 +2,5 @@
 User-agent: *
 Disallow: /dev/
 Disallow: /admin/
-Disallow: /Security/
+Disallow: /Security/<% if $DisallowedPages %><% loop $DisallowedPages %>
+Disallow: $Link<% end_loop %><% end_if %>

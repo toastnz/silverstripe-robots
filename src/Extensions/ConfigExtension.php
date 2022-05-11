@@ -14,7 +14,7 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
 
 class ConfigExtension extends DataExtension
 {
-    private static $robots_mode;
+    private static $force_robots_mode;
     private static $enable_custom_robots = true;
     private static $robots_tab_path = 'Root.Robots';
 
@@ -76,11 +76,9 @@ class ConfigExtension extends DataExtension
 
         $optionsCount = count($options);
         if ($optionsCount === 1) {
-
             if ($isCustomAllowed) {
                 $fields->addFieldToTab($tabPath, $customField);
-            }
-            else {
+            } else {
                 $tabPath = 'Root.Main';
             }
 
@@ -89,9 +87,7 @@ class ConfigExtension extends DataExtension
 
             reset($options);
             $this->getOwner()->RobotsMode = key($options);
-        }
-        else {
-
+        } else {
             $modeField = OptionsetField::create('RobotsMode', 'Robots.txt', $options);
             $fields->addFieldToTab($tabPath, $modeField);
 
@@ -128,35 +124,35 @@ class ConfigExtension extends DataExtension
         return $fields;
     }
 
-	public function populateDefaults()
-	{
-		$this->getOwner()->RobotsMode = $this->getOwner()->getDefaultRobotsMode();
-	}
+    public function populateDefaults()
+    {
+        $this->getOwner()->RobotsMode = $this->getOwner()->getDefaultRobotsMode();
+    }
 
-	public function requireDefaultRecords()
-	{
-		// get correct config class
-		if (class_exists('Symbiote\Multisites\Multisites')) {
-			$configs = \Symbiote\Multisites\Model\Site::get();
-		} else {
-			$configs = SiteConfig::get();
-		}
-		// update configs if required
-		if ($configs && $configs->exists()) {
-			foreach($configs as $config) {
-				if (!$config->RobotsMode) {
-					if ($config->RobotsContent) {
-						$config->RobotsMode = RobotsController::MODE_CUSTOM;
-					} else {
-						$config->RobotsMode = $config->getDefaultRobotsMode();
-					}
-					$config->write();
-				}
-			}
-		}
-	}
+    public function requireDefaultRecords()
+    {
+        // get correct config class
+        if (class_exists('Symbiote\Multisites\Multisites')) {
+            $configs = \Symbiote\Multisites\Model\Site::get();
+        } else {
+            $configs = SiteConfig::get();
+        }
+        // update configs if required
+        if ($configs && $configs->exists()) {
+            foreach ($configs as $config) {
+                if (!$config->RobotsMode) {
+                    if ($config->RobotsContent) {
+                        $config->RobotsMode = RobotsController::MODE_CUSTOM;
+                    } else {
+                        $config->RobotsMode = $config->getDefaultRobotsMode();
+                    }
+                    $config->write();
+                }
+            }
+        }
+    }
 
-	public function getDefaultRobotsMode()
+    public function getDefaultRobotsMode()
     {
         $mode = RobotsController::MODE_DISALLOW;
         $this->getOwner()->invokeWithExtensions('updateDefaultRobotsMode');
@@ -178,12 +174,12 @@ class ConfigExtension extends DataExtension
     {
         $mode = null;
         $options = $this->getOwner()->getRobotsModeOptions();
-        $envMode = Environment::getEnv('ROBOTS_MODE');
+        $envMode = Environment::getEnv('FORCE_ROBOTS_MODE');
         if ($envMode && isset($options[$envMode])) {
             $mode = $envMode;
         }
         if (!$mode) {
-            $configMode = $this->getOwner()->config()->get('robots_mode');
+            $configMode = $this->getOwner()->config()->get('force_robots_mode');
             if ($configMode && isset($options[$configMode])) {
                 $mode = $configMode;
             }
@@ -214,12 +210,14 @@ class ConfigExtension extends DataExtension
         return $path;
     }
 
-    public function getRenderedContentAllow() {
+    public function getRenderedContentAllow()
+    {
         $controller = RobotsController::create();
         return $controller->allow();
     }
 
-    public function getRenderedContentDisallow() {
+    public function getRenderedContentDisallow()
+    {
         $controller = RobotsController::create();
         return $controller->disallow();
     }

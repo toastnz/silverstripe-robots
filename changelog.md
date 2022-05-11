@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0]
+
+* rename .env `ROBOTS_MODE` to `FORCE_ROBOTS_MODE` and `ConfigExtension::robots_mode` to `ConfigExtension::force_robots_mode` for clarification
+* enable robots tag output in dev and test environments
+* add `DisallowedPages` to allowed robots.txt output, based on Google Sitemap settings
+
 ## [3.1.1]
 
 * fix default values when upgrading from version 1.x

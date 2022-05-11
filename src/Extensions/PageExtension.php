@@ -4,22 +4,21 @@ namespace Innoweb\Robots\Extensions;
 
 use Innoweb\Robots\Controllers\RobotsController;
 use SilverStripe\Control\Controller;
-use SilverStripe\Control\Director;
 use SilverStripe\Core\Extension;
 use SilverStripe\Security\Security;
+use Wilr\GoogleSitemaps\GoogleSitemap;
 
 class PageExtension extends Extension
 {
-    public function MetaTags(&$tagsString)
+    public function MetaComponents(array &$tags)
     {
         if ($this->getOwner()->config()->robots_enable_metatag == true) {
-            $robotsString = $this->getOwner()->getRobotsTagString();
-            $robotsMeta = "<meta name=\"robots\" content=\"$robotsString\" />";
-            if (preg_match('/<title>.*<\/title>/', $tagsString) == 1) {
-                $tagsString = preg_replace('/(<title>.*<\/title>)/', "$1\n$robotsMeta", $tagsString);
-            } else {
-                $tagsString = $robotsMeta . "\n" . $tagsString;
-            }
+            $tags['robots'] = [
+                'attributes' => [
+                    'name' => 'robots',
+                    'content' => $this->getOwner()->getRobotsTagString(),
+                ],
+            ];
         }
     }
 
@@ -31,16 +30,23 @@ class PageExtension extends Extension
         if (RobotsController::create()->getActiveMode() == RobotsController::MODE_DISALLOW) {
             $follow = "nofollow";
             $index = "noindex";
-        } else if (!Director::isLive()) {
+        } elseif (is_a(Controller::curr(), Security::class)) {
             $follow = "nofollow";
             $index = "noindex";
-        } else if (is_a(Controller::curr(), Security::class)) {
-            $follow = "nofollow";
-            $index = "noindex";
-        } else if (
-            $this->getOwner()->hasExtension('Wilr\GoogleSitemaps\Extensions\GoogleSitemapSiteTreeExtension')
+        } elseif ($this->getOwner()->hasExtension('Wilr\GoogleSitemaps\Extensions\GoogleSitemapSiteTreeExtension')
             && ($priority = $this->getOwner()->Priority)
             && $priority == -1
+        ) {
+            $index = "noindex";
+        } elseif (class_exists(GoogleSitemap::class)
+            && method_exists(GoogleSitemap::class, 'getFilterFieldName')
+            && ($googleSitemap = GoogleSitemap::singleton())
+            && ($filterFieldName = $googleSitemap->getFilterFieldName())
+            && (!$this->getOwner()->{$filterFieldName})
+        ) {
+            $index = "noindex";
+        } elseif ($this->getOwner()->hasExtension('Wilr\GoogleSitemaps\Extensions\GoogleSitemapSiteTreeExtension')
+            && !$this->getOwner()->ShowInSearch
         ) {
             $index = "noindex";
         }
