@@ -7,6 +7,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\SiteConfig\SiteConfig;
+use Symbiote\Multisites\Model\Site;
 use Symbiote\Multisites\Multisites;
 use Wilr\GoogleSitemaps\GoogleSitemap;
 
@@ -136,17 +137,30 @@ class RobotsController extends Controller
         }
 
         if ($isGoogleSitemapsEnabled) {
-            $googleSitemap = GoogleSitemap::singleton();
+			$pages = SiteTree::get();
+
+			$isMultisitesEnabled = ModuleLoader::inst()
+				->getManifest()
+				->moduleExists('symbiote/silverstripe-multisites');
+			if ($isMultisitesEnabled) {
+				$pages = $pages->exclude([
+					'ClassName' => Site::class
+				]);
+			}
+
+			$googleSitemap = GoogleSitemap::singleton();
             $isFiltered = (bool) $googleSitemap->config()->get('use_show_in_search');
             $filterFieldName = 'ShowInSearch';
             if (method_exists(GoogleSitemap::class, 'getFilterFieldName')) {
                 $filterFieldName = $googleSitemap->getFilterFieldName();
             }
             if ($isFiltered) {
-                return SiteTree::get()->exclude($filterFieldName, true);
+                $pages = $pages->exclude($filterFieldName, true);
             } else {
-                return SiteTree::get()->filter(['Priority' => '-1']);
+				$pages = $pages->filter(['Priority' => '-1']);
             }
+
+			return $pages;
         }
 
         return null;
