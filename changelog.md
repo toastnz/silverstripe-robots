@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.2]
+
+* check for owner and controller before calling extensions
+* exclude redirector and redirection pages from DisallowedPages
+
 ## [4.0.1]
 
 * exclude Multisites Sites from DisallowedPages

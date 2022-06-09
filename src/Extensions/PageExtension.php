@@ -61,9 +61,13 @@ class PageExtension extends Extension
 
         $robotsString = "$index, $follow";
 
-        $this->getOwner()->invokeWithExtensions('updateRobotsTagString', $robotsString);
+		if ($this->getOwner()) {
+			$this->getOwner()->invokeWithExtensions('updateRobotsTagString', $robotsString);
+		}
 
-        Controller::curr()->invokeWithExtensions('updateRobotsTagString', $robotsString);
+		if (Controller::curr()) {
+			Controller::curr()->invokeWithExtensions('updateRobotsTagString', $robotsString);
+		}
 
         return $robotsString;
     }

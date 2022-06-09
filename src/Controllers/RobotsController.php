@@ -2,6 +2,8 @@
 
 namespace Innoweb\Robots\Controllers;
 
+use Fromholdio\SuperLinkerRedirection\Pages\RedirectionPage;
+use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -139,12 +141,28 @@ class RobotsController extends Controller
         if ($isGoogleSitemapsEnabled) {
 			$pages = SiteTree::get();
 
+			// exclude redirector page
+			$pages = $pages->exclude([
+				'ClassName' => RedirectorPage::class
+			]);
+
+			// exclude multisites sites
 			$isMultisitesEnabled = ModuleLoader::inst()
 				->getManifest()
 				->moduleExists('symbiote/silverstripe-multisites');
 			if ($isMultisitesEnabled) {
 				$pages = $pages->exclude([
 					'ClassName' => Site::class
+				]);
+			}
+
+			// exclude redirection page
+			$isRedirectionEnabled = ModuleLoader::inst()
+				->getManifest()
+				->moduleExists('fromholdio/silverstripe-superlinker-redirection');
+			if ($isRedirectionEnabled) {
+				$pages = $pages->exclude([
+					'ClassName' => RedirectionPage::class
 				]);
 			}
 
