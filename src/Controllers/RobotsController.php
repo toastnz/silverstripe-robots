@@ -3,6 +3,7 @@
 namespace Innoweb\Robots\Controllers;
 
 use Fromholdio\SuperLinkerRedirection\Pages\RedirectionPage;
+use Innoweb\FolderPage\Pages\FolderPage;
 use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
@@ -163,6 +164,16 @@ class RobotsController extends Controller
 			if ($isRedirectionEnabled) {
 				$pages = $pages->exclude([
 					'ClassName' => RedirectionPage::class
+				]);
+			}
+
+			// exclude folder pages
+			$isFoldersEnabled = ModuleLoader::inst()
+				->getManifest()
+				->moduleExists('innoweb/silverstripe-folder-page');
+			if ($isFoldersEnabled) {
+				$pages = $pages->exclude([
+					'ClassName' => FolderPage::class
 				]);
 			}
 
