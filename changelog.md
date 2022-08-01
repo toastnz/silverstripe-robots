@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.2]
+
+* fix requirements (add unclecheese/display-logic)
+
 ## [4.1.1]
 
 * exclude folder pages from DisallowedPages
