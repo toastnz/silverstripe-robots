@@ -53,7 +53,7 @@ class RobotsController extends Controller
     public function custom()
     {
         $site = $this->getRobotsSite();
-        $custom = trim($site->RobotsContent);
+        $custom = trim($site->getField('RobotsContent') ?? '');
 
         if (!$custom || empty($custom)) {
             return $this->disallow();
