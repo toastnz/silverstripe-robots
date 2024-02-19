@@ -13,12 +13,31 @@ SilverStripe\Control\Director:
     robots.txt: Innoweb\Robots\Controllers\RobotsController
     $URLSegment//$Action/$ID/$OtherID: Symbiote\Multisites\Control\MultisitesFrontController
 
+
+---
+Name: innoweb-robots-routes-configured-multi
+After:
+  - '*'
+  - 'multisitesmodelascontrollerroutes'
+  - 'modelascontrollercatchallroute'
+Only:
+  classexists: 'Fromholdio\ConfiguredMultisites\Multisites'
+---
+SilverStripe\Control\Director:
+  rules:
+    '': Fromholdio\ConfiguredMultisites\Control\MultisitesRootController
+    robots.txt: Innoweb\Robots\Controllers\RobotsController
+    $URLSegment//$Action/$ID/$OtherID: Fromholdio\ConfiguredMultisites\Control\MultisitesFrontController
+
+
 ---
 Name: innoweb-robots-routes-nomulti
 After:
   - '*'
 Except:
-  classexists: 'Symbiote\Multisites\Multisites'
+  classexists:
+    - 'Symbiote\Multisites\Multisites'
+    - 'Fromholdio\ConfiguredMultisites\Multisites'
 ---
 SilverStripe\Control\Director:
   rules:

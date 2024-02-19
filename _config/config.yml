@@ -26,9 +26,21 @@ Symbiote\Multisites\Model\Site:
     - Innoweb\Robots\Extensions\ConfigExtension
 
 ---
+Name: innoweb-robots-configured-multisites
+Only:
+  classexists: 'Fromholdio\ConfiguredMultisites\Multisites'
+---
+
+Fromholdio\ConfiguredMultisites\Model\Site:
+  extensions:
+    - Innoweb\Robots\Extensions\ConfigExtension
+
+---
 Name: innoweb-robots-nomultisites
 Except:
-  classexists: 'Symbiote\Multisites\Multisites'
+  classexists:
+    - 'Symbiote\Multisites\Multisites'
+    - 'Fromholdio\ConfiguredMultisites\Multisites'
 ---
 Silverstripe\SiteConfig\SiteConfig:
   extensions:

@@ -7,7 +7,7 @@
 
 Adds a Robots.txt file that is configurable from /admin/settings/ and injects robots meta tag into all pages.
 
-This module supports single site as well as [multisites](https://github.com/symbiote/silverstripe-multisites) setups.
+This module supports single site as well as [multisites](https://github.com/symbiote/silverstripe-multisites) and [configured-multisites](https://github.com/fromholdio/silverstripe-multisites) setups.
 
 ## Requirements
 
@@ -27,7 +27,7 @@ Then run dev/build.
 
 ### Robots.txt
 
-On the SiteConfig (or Site is Multisites is installed) there is a setting in the CMS that lets you set the robots mode. The three options are:
+On the SiteConfig (or Site if Multisites is installed) there is a setting in the CMS that lets you set the robots mode. The three options are:
 * Allow all
 * Disallow all
 * Custom content

@@ -10,8 +10,6 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\SiteConfig\SiteConfig;
-use Symbiote\Multisites\Model\Site;
-use Symbiote\Multisites\Multisites;
 use Wilr\GoogleSitemaps\GoogleSitemap;
 
 class RobotsController extends Controller
@@ -84,12 +82,9 @@ class RobotsController extends Controller
 
     public function getRobotsSite()
     {
-        $isMultisitesEnabled = ModuleLoader::inst()
-            ->getManifest()
-            ->moduleExists('symbiote/silverstripe-multisites');
-
-        if ($isMultisitesEnabled) {
-            $site = Multisites::inst()->getCurrentSite();
+		$multisitesClass = $this->getMultisitesClassName();
+        if (!empty($multisitesClass)) {
+            $site = $multisitesClass::inst()->getCurrentSite();
         } else {
             $site = SiteConfig::current_site_config();
         }
@@ -111,12 +106,9 @@ class RobotsController extends Controller
         }
 
         if ($isGoogleSitemapsEnabled) {
-            $isMultisitesEnabled = ModuleLoader::inst()
-                ->getManifest()
-                ->moduleExists('symbiote/silverstripe-multisites');
-
-            if ($isMultisitesEnabled) {
-                $site = Multisites::inst()->getCurrentSite();
+			$multisitesClass = $this->getMultisitesClassName();
+			if (!empty($multisitesClass)) {
+                $site = $multisitesClass::inst()->getCurrentSite();
                 $url = $site->getURL() . $url;
             } else {
                 $url = Director::absoluteURL($url);
@@ -147,13 +139,10 @@ class RobotsController extends Controller
 				'ClassName' => RedirectorPage::class
 			]);
 
-			// exclude multisites sites
-			$isMultisitesEnabled = ModuleLoader::inst()
-				->getManifest()
-				->moduleExists('symbiote/silverstripe-multisites');
-			if ($isMultisitesEnabled) {
+			$siteClass = $this->getMultisitesSiteClassName();
+			if (!empty($siteClass)) {
 				$pages = $pages->exclude([
-					'ClassName' => Site::class
+					'ClassName' => $siteClass,
 				]);
 			}
 
@@ -194,4 +183,28 @@ class RobotsController extends Controller
 
         return null;
     }
+
+	public function getMultisitesClassName(): ?string
+	{
+		$manifest = ModuleLoader::inst()->getManifest();
+		if ($manifest->moduleExists('symbiote/silverstripe-multisites')) {
+			return \Symbiote\Multisites\Multisites::class;
+		}
+		if ($manifest->moduleExists('fromholdio/silverstripe-configured-multisites')) {
+			return \Fromholdio\ConfiguredMultisites\Multisites::class;
+		}
+		return null;
+	}
+
+	public function getMultisitesSiteClassName(): ?string
+	{
+		$manifest = ModuleLoader::inst()->getManifest();
+		if ($manifest->moduleExists('symbiote/silverstripe-multisites')) {
+			return \Symbiote\Multisites\Model\Site::class;
+		}
+		if ($manifest->moduleExists('fromholdio/silverstripe-configured-multisites')) {
+			return \Fromholdio\ConfiguredMultisites\Model\Site::class;
+		}
+		return null;
+	}
 }
