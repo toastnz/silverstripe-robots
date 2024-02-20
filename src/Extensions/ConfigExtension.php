@@ -133,7 +133,9 @@ class ConfigExtension extends DataExtension
     {
         // get correct config class
         if (class_exists('Symbiote\Multisites\Multisites')) {
-            $configs = \Symbiote\Multisites\Model\Site::get();
+			$configs = \Symbiote\Multisites\Model\Site::get();
+		} elseif (class_exists('Fromholdio\ConfiguredMultisites\Multisites')) {
+			$configs = \Fromholdio\ConfiguredMultisites\Model\Site::get();
         } else {
             $configs = SiteConfig::get();
         }
