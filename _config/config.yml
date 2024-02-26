@@ -19,7 +19,7 @@ SilverStripe\ErrorPage\ErrorPage:
 ---
 Name: innoweb-robots-multisites
 Only:
-  classexists: 'Symbiote\Multisites\Multisites'
+  moduleexists: 'symbiote/silverstripe-multisites'
 ---
 Symbiote\Multisites\Model\Site:
   extensions:
@@ -28,7 +28,7 @@ Symbiote\Multisites\Model\Site:
 ---
 Name: innoweb-robots-configured-multisites
 Only:
-  classexists: 'Fromholdio\ConfiguredMultisites\Multisites'
+  moduleexists: 'fromholdio/silverstripe-configured-multisites'
 ---
 
 Fromholdio\ConfiguredMultisites\Model\Site:
@@ -38,9 +38,9 @@ Fromholdio\ConfiguredMultisites\Model\Site:
 ---
 Name: innoweb-robots-nomultisites
 Except:
-  classexists:
-    - 'Symbiote\Multisites\Multisites'
-    - 'Fromholdio\ConfiguredMultisites\Multisites'
+  moduleexists:
+    - 'symbiote/silverstripe-multisites'
+    - 'fromholdio/silverstripe-configured-multisites'
 ---
 Silverstripe\SiteConfig\SiteConfig:
   extensions:

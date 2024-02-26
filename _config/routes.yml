@@ -1,44 +1,27 @@
 ---
-Name: innoweb-robots-routes-multi
+Name: innoweb-robots-routes-multisites
 After:
   - '*'
   - 'multisitesmodelascontrollerroutes'
   - 'modelascontrollercatchallroute'
 Only:
-  classexists: 'Symbiote\Multisites\Multisites'
+  moduleexists: 'symbiote/silverstripe-multisites'
 ---
 SilverStripe\Control\Director:
   rules:
     '': Symbiote\Multisites\Control\MultisitesRootController
-    robots.txt: Innoweb\Robots\Controllers\RobotsController
-    $URLSegment//$Action/$ID/$OtherID: Symbiote\Multisites\Control\MultisitesFrontController
+    'robots.txt': Innoweb\Robots\Controllers\RobotsController
+    '$URLSegment//$Action/$ID/$OtherID': Symbiote\Multisites\Control\MultisitesFrontController
 
 
 ---
-Name: innoweb-robots-routes-configured-multi
-After:
-  - '*'
-  - 'multisitesmodelascontrollerroutes'
-  - 'modelascontrollercatchallroute'
-Only:
-  classexists: 'Fromholdio\ConfiguredMultisites\Multisites'
----
-SilverStripe\Control\Director:
-  rules:
-    '': Fromholdio\ConfiguredMultisites\Control\MultisitesRootController
-    robots.txt: Innoweb\Robots\Controllers\RobotsController
-    $URLSegment//$Action/$ID/$OtherID: Fromholdio\ConfiguredMultisites\Control\MultisitesFrontController
-
-
----
-Name: innoweb-robots-routes-nomulti
+Name: innoweb-robots-routes-nomultisites
 After:
   - '*'
 Except:
-  classexists:
-    - 'Symbiote\Multisites\Multisites'
-    - 'Fromholdio\ConfiguredMultisites\Multisites'
+  moduleexists:
+    - 'symbiote/silverstripe-multisites'
 ---
 SilverStripe\Control\Director:
   rules:
-    robots.txt: Innoweb\Robots\Controllers\RobotsController
+    'robots.txt': Innoweb\Robots\Controllers\RobotsController

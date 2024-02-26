@@ -20,7 +20,7 @@ class RobotsController extends Controller
 
     public function index()
     {
-        $mode = $this->getActiveMode();
+		$mode = $this->getActiveMode();
 
         $this->getResponse()->addHeader(
             'Content-Type',
@@ -83,7 +83,7 @@ class RobotsController extends Controller
     public function getRobotsSite()
     {
 		$multisitesClass = $this->getMultisitesClassName();
-        if (!empty($multisitesClass)) {
+        if (isset($multisitesClass) && class_exists($multisitesClass)) {
             $site = $multisitesClass::inst()->getCurrentSite();
         } else {
             $site = SiteConfig::current_site_config();
