@@ -13,11 +13,8 @@ SilverStripe\Control\Director:
     'robots.txt': Innoweb\Robots\Controllers\RobotsController
     '$URLSegment//$Action/$ID/$OtherID': Symbiote\Multisites\Control\MultisitesFrontController
 
-
 ---
-Name: innoweb-robots-routes-nomultisites
-After:
-  - '*'
+Name: innoweb-robots-routes-no-multisites
 Except:
   moduleexists:
     - 'symbiote/silverstripe-multisites'

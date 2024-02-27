@@ -7,7 +7,7 @@
 
 Adds a Robots.txt file that is configurable from /admin/settings/ and injects robots meta tag into all pages.
 
-This module supports single site as well as [multisites](https://github.com/symbiote/silverstripe-multisites) and [configured-multisites](https://github.com/fromholdio/silverstripe-multisites) setups.
+This module supports single site as well as [multisites](https://github.com/symbiote/silverstripe-multisites) and [configured-multisites](https://github.com/fromholdio/silverstripe-configured-multisites) setups.
 
 ## Requirements
 

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.1.1]
+
+* fix routes for configured multistes
+
 ## [5.1.0]
 
 * add compatibility for configured multistes
