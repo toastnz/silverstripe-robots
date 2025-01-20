@@ -33,10 +33,10 @@ class PageExtension extends Extension
         } elseif (is_a(Controller::curr(), Security::class)) {
             $follow = "nofollow";
             $index = "noindex";
-		} elseif (Controller::curr()->hasMethod('data') && ($page = Controller::curr()->data()) && stripos($page->URLSegment, 'error') !== false) {
-			$follow = "nofollow";
-			$index = "noindex";
-        } elseif ($this->getOwner()->hasExtension('Wilr\GoogleSitemaps\Extensions\GoogleSitemapSiteTreeExtension')
+        } elseif (Controller::curr()->hasMethod('data') && ($page = Controller::curr()->data()) && stripos($page->URLSegment ?? '', 'error') !== false) {
+            $follow = "nofollow";
+            $index = "noindex";
+        } elseif ($this->getOwner()->hasExtension(\Wilr\GoogleSitemaps\Extensions\GoogleSitemapSiteTreeExtension::class)
             && ($priority = $this->getOwner()->Priority)
             && $priority == -1
         ) {
@@ -48,7 +48,7 @@ class PageExtension extends Extension
             && (!$this->getOwner()->{$filterFieldName})
         ) {
             $index = "noindex";
-        } elseif ($this->getOwner()->hasExtension('Wilr\GoogleSitemaps\Extensions\GoogleSitemapSiteTreeExtension')
+        } elseif ($this->getOwner()->hasExtension(\Wilr\GoogleSitemaps\Extensions\GoogleSitemapSiteTreeExtension::class)
             && !$this->getOwner()->ShowInSearch
         ) {
             $index = "noindex";
@@ -64,13 +64,13 @@ class PageExtension extends Extension
 
         $robotsString = "$index, $follow";
 
-		if ($this->getOwner()) {
-			$this->getOwner()->invokeWithExtensions('updateRobotsTagString', $robotsString);
-		}
+        if ($this->getOwner()) {
+            $this->getOwner()->invokeWithExtensions('updateRobotsTagString', $robotsString);
+        }
 
-		if (Controller::curr()) {
-			Controller::curr()->invokeWithExtensions('updateRobotsTagString', $robotsString);
-		}
+        if (Controller::curr()) {
+            Controller::curr()->invokeWithExtensions('updateRobotsTagString', $robotsString);
+        }
 
         return $robotsString;
     }

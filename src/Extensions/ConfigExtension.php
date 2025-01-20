@@ -84,9 +84,7 @@ class ConfigExtension extends DataExtension
 
             $hiddenModeField = HiddenField::create('RobotsMode', null);
             $fields->addFieldToTab($tabPath, $hiddenModeField);
-
-            reset($options);
-            $this->getOwner()->RobotsMode = key($options);
+            $this->getOwner()->RobotsMode = array_key_first($options);
         } else {
             $modeField = OptionsetField::create('RobotsMode', 'Robots.txt', $options);
             $fields->addFieldToTab($tabPath, $modeField);
@@ -133,9 +131,9 @@ class ConfigExtension extends DataExtension
     {
         // get correct config class
         if (class_exists('Symbiote\Multisites\Multisites')) {
-			$configs = \Symbiote\Multisites\Model\Site::get();
-		} elseif (class_exists('Fromholdio\ConfiguredMultisites\Multisites')) {
-			$configs = \Fromholdio\ConfiguredMultisites\Model\Site::get();
+            $configs = \Symbiote\Multisites\Model\Site::get();
+        } elseif (class_exists('Fromholdio\ConfiguredMultisites\Multisites')) {
+            $configs = \Fromholdio\ConfiguredMultisites\Model\Site::get();
         } else {
             $configs = SiteConfig::get();
         }

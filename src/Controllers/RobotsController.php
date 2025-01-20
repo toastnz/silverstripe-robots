@@ -20,7 +20,7 @@ class RobotsController extends Controller
 
     public function index()
     {
-		$mode = $this->getActiveMode();
+        $mode = $this->getActiveMode();
 
         $this->getResponse()->addHeader(
             'Content-Type',
@@ -82,7 +82,7 @@ class RobotsController extends Controller
 
     public function getRobotsSite()
     {
-		$multisitesClass = $this->getMultisitesClassName();
+        $multisitesClass = $this->getMultisitesClassName();
         if (isset($multisitesClass) && class_exists($multisitesClass)) {
             $site = $multisitesClass::inst()->getCurrentSite();
         } else {
@@ -106,8 +106,8 @@ class RobotsController extends Controller
         }
 
         if ($isGoogleSitemapsEnabled) {
-			$multisitesClass = $this->getMultisitesClassName();
-			if (!empty($multisitesClass)) {
+            $multisitesClass = $this->getMultisitesClassName();
+            if (!empty($multisitesClass)) {
                 $site = $multisitesClass::inst()->getCurrentSite();
                 $url = $site->getURL() . $url;
             } else {
@@ -132,41 +132,41 @@ class RobotsController extends Controller
         }
 
         if ($isGoogleSitemapsEnabled) {
-			$pages = SiteTree::get();
+            $pages = SiteTree::get();
 
-			// exclude redirector page
-			$pages = $pages->exclude([
-				'ClassName' => RedirectorPage::class
-			]);
+            // exclude redirector page
+            $pages = $pages->exclude([
+                'ClassName' => RedirectorPage::class
+            ]);
 
-			$siteClass = $this->getMultisitesSiteClassName();
-			if (!empty($siteClass)) {
-				$pages = $pages->exclude([
-					'ClassName' => $siteClass,
-				]);
-			}
+            $siteClass = $this->getMultisitesSiteClassName();
+            if (!empty($siteClass)) {
+                $pages = $pages->exclude([
+                    'ClassName' => $siteClass,
+                ]);
+            }
 
-			// exclude redirection page
-			$isRedirectionEnabled = ModuleLoader::inst()
-				->getManifest()
-				->moduleExists('fromholdio/silverstripe-superlinker-redirection');
-			if ($isRedirectionEnabled) {
-				$pages = $pages->exclude([
-					'ClassName' => RedirectionPage::class
-				]);
-			}
+            // exclude redirection page
+            $isRedirectionEnabled = ModuleLoader::inst()
+                ->getManifest()
+                ->moduleExists('fromholdio/silverstripe-superlinker-redirection');
+            if ($isRedirectionEnabled) {
+                $pages = $pages->exclude([
+                    'ClassName' => RedirectionPage::class
+                ]);
+            }
 
-			// exclude folder pages
-			$isFoldersEnabled = ModuleLoader::inst()
-				->getManifest()
-				->moduleExists('innoweb/silverstripe-folder-page');
-			if ($isFoldersEnabled) {
-				$pages = $pages->exclude([
-					'ClassName' => FolderPage::class
-				]);
-			}
+            // exclude folder pages
+            $isFoldersEnabled = ModuleLoader::inst()
+                ->getManifest()
+                ->moduleExists('innoweb/silverstripe-folder-page');
+            if ($isFoldersEnabled) {
+                $pages = $pages->exclude([
+                    'ClassName' => FolderPage::class
+                ]);
+            }
 
-			$googleSitemap = GoogleSitemap::singleton();
+            $googleSitemap = GoogleSitemap::singleton();
             $isFiltered = (bool) $googleSitemap->config()->get('use_show_in_search');
             $filterFieldName = 'ShowInSearch';
             if (method_exists(GoogleSitemap::class, 'getFilterFieldName')) {
@@ -175,36 +175,36 @@ class RobotsController extends Controller
             if ($isFiltered) {
                 $pages = $pages->exclude($filterFieldName, true);
             } else {
-				$pages = $pages->filter(['Priority' => '-1']);
+                $pages = $pages->filter(['Priority' => '-1']);
             }
 
-			return $pages;
+            return $pages;
         }
 
         return null;
     }
 
-	public function getMultisitesClassName(): ?string
-	{
-		$manifest = ModuleLoader::inst()->getManifest();
-		if ($manifest->moduleExists('symbiote/silverstripe-multisites')) {
-			return \Symbiote\Multisites\Multisites::class;
-		}
-		if ($manifest->moduleExists('fromholdio/silverstripe-configured-multisites')) {
-			return \Fromholdio\ConfiguredMultisites\Multisites::class;
-		}
-		return null;
-	}
+    public function getMultisitesClassName(): ?string
+    {
+        $manifest = ModuleLoader::inst()->getManifest();
+        if ($manifest->moduleExists('symbiote/silverstripe-multisites')) {
+            return \Symbiote\Multisites\Multisites::class;
+        }
+        if ($manifest->moduleExists('fromholdio/silverstripe-configured-multisites')) {
+            return \Fromholdio\ConfiguredMultisites\Multisites::class;
+        }
+        return null;
+    }
 
-	public function getMultisitesSiteClassName(): ?string
-	{
-		$manifest = ModuleLoader::inst()->getManifest();
-		if ($manifest->moduleExists('symbiote/silverstripe-multisites')) {
-			return \Symbiote\Multisites\Model\Site::class;
-		}
-		if ($manifest->moduleExists('fromholdio/silverstripe-configured-multisites')) {
-			return \Fromholdio\ConfiguredMultisites\Model\Site::class;
-		}
-		return null;
-	}
+    public function getMultisitesSiteClassName(): ?string
+    {
+        $manifest = ModuleLoader::inst()->getManifest();
+        if ($manifest->moduleExists('symbiote/silverstripe-multisites')) {
+            return \Symbiote\Multisites\Model\Site::class;
+        }
+        if ($manifest->moduleExists('fromholdio/silverstripe-configured-multisites')) {
+            return \Fromholdio\ConfiguredMultisites\Model\Site::class;
+        }
+        return null;
+    }
 }
