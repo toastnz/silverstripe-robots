@@ -10,6 +10,7 @@ use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\View\SSViewer;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
 
 class ConfigExtension extends DataExtension
@@ -212,13 +213,21 @@ class ConfigExtension extends DataExtension
 
     public function getRenderedContentAllow()
     {
+        $oldThemes = SSViewer::get_themes();
+        SSViewer::set_themes(SSViewer::config()->uninherited('themes'));
         $controller = RobotsController::create();
-        return $controller->allow();
+        $result = $controller->allow();
+        SSViewer::set_themes($oldThemes);
+        return $result;
     }
 
     public function getRenderedContentDisallow()
     {
+        $oldThemes = SSViewer::get_themes();
+        SSViewer::set_themes(SSViewer::config()->uninherited('themes'));
         $controller = RobotsController::create();
-        return $controller->disallow();
+        $result = $controller->disallow();
+        SSViewer::set_themes($oldThemes);
+        return $result;
     }
 }

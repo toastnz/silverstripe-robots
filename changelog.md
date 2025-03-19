@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.1.3]
+
+* fix rendering of robots content in CMS when template has been overwritten in theme
+
 ## [5.1.2]
 
 * code cleanup, PHP 8.1 compatibility
