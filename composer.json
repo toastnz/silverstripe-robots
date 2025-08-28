@@ -16,8 +16,8 @@
 		"homepage": "https://innoweb.com.au"
 	}],
 	"require": {
-		"silverstripe/cms": "^5",
-		"unclecheese/display-logic": "^3"
+		"silverstripe/cms": "^6",
+		"unclecheese/display-logic": "^4"
 	},
 	"autoload": {
 		"psr-4": {
