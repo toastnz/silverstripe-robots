@@ -2,18 +2,19 @@
 
 namespace Innoweb\Robots\Extensions;
 
-use Innoweb\Robots\Controllers\RobotsController;
-use SilverStripe\Core\Environment;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\OptionsetField;
-use SilverStripe\Forms\TextareaField;
-use SilverStripe\ORM\DataExtension;
-use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\View\SSViewer;
+use SilverStripe\Core\Extension;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Core\Environment;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Forms\TextareaField;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\SiteConfig\SiteConfig;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
+use Innoweb\Robots\Controllers\RobotsController;
 
-class ConfigExtension extends DataExtension
+class ConfigExtension extends Extension
 {
     private static $force_robots_mode;
     private static $enable_custom_robots = true;
