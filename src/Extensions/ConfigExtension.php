@@ -219,7 +219,7 @@ class ConfigExtension extends Extension
         $controller = RobotsController::create();
         $result = $controller->allow();
         SSViewer::set_themes($oldThemes);
-        return $result;
+        return $result ? $result->getValue() : '';
     }
 
     public function getRenderedContentDisallow()
@@ -229,6 +229,6 @@ class ConfigExtension extends Extension
         $controller = RobotsController::create();
         $result = $controller->disallow();
         SSViewer::set_themes($oldThemes);
-        return $result;
+        return $result ? $result->getValue() : '';
     }
 }
